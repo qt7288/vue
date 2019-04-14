@@ -1,6 +1,6 @@
 <template>
    <div class="Search">
-    <mt-header fixed class="a" title="搜一搜">
+    <mt-header fixed title="搜一搜">
     <router-link to="Tabke" slot="left">
         <span class="mui-icon mui-icon-arrowleft"></span>
     </router-link>
@@ -10,11 +10,13 @@
             <input type="button" class="ist" @click="btnReset()" v-show="isShow" value="×"> 
        </div>
        <div class="btnSearch">
-           <input type="button" @click="btn()" value="查 询" class="btnSearch-1"> 
+           <input type="button" @click="btn()" value="I D 查 询" class="btnSearch-1"> 
        </div>
        <div id="SearchCard" v-show="isT">
            <div class="SearchCards">
-               <div class="SearchCards-header">friends:{{uname}}
+               <div class="SearchCards-header">
+                   <p style="color:#fff">friends:{{uname}}</p>
+                   
                    <span id="insert" v-show="istt" @click="btnInsert" class="mui-icon mui-icon-plusempty"></span>
                </div>               
            </div>
@@ -77,7 +79,8 @@ export default {
             this.a="",
             this.isShow=false
         },btn(){
-            this.isBlur()
+            this.isBlur();
+        
         },btnInsert(){
             var url = "http://127.0.0.1:3000/insertUname?uname="+this.$store.state.uname+"&id="+this.$store.state.uid+"&friendid="+this.a+"&frienduname="+this.uname;
             this.axios.get(url).then(result=>{
@@ -117,7 +120,7 @@ export default {
     }
     .SearchCards-header{
         height: 2rem;
-        text-align:left;
+        text-align:center;
         padding-left: 10px;
         color: rgb(255, 255, 255);
         line-height:2rem;
@@ -140,9 +143,13 @@ export default {
         border:0;
         color: #fff;
         font-size: 10px;
+        text-align: center;
         border-bottom: 1px solid rgb(150, 150, 150);
         border-radius: 0;
         outline: none;
+    }
+    .inputSearch input:nth-child(2){
+        text-align: right;
     }
     .btnSearch input{
         background: rgba(255, 255, 255, 0.267);

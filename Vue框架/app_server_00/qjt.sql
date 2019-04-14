@@ -55,6 +55,7 @@ CREATE TABLE qz_speak_s(
   say VARCHAR(100),
   sayTime VARCHAR(24)
 );
+
 -- #用户发表朋友圈
 CREATE TABLE qz_sayThing (
   sayid INT PRIMARY KEY AUTO_INCREMENT,

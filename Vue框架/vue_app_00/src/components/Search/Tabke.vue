@@ -1,6 +1,6 @@
 <template>
     <div id="Tabke">
-            <mt-header fixed class="a" title="F">
+            <mt-header fixed title="友圈">
                 <router-link to="Search" slot="right">
                     <span class="mui-icon mui-icon-plusempty"></span>
             </router-link>
@@ -11,20 +11,22 @@
             <!-- </div> -->
             <!-- 好友栏 -->
             <div id="friends">
-
                 <!--  -->
-                <div class="Tabke" style="color:#fff"><span>好友栏</span>
-                </div>
+                <!-- <div class="Tabke" style="color:#fff"><span>友圈</span></div>                -->
                  <!-- v-for="(aa,w) of myToa" :key="w" :class="aa.stateU == 1 ? 'blue':'red'" -->
-                <div class="card" v-for="(item,i) of myList" :key="i" @click="btn1(item.frienduname,item.friendid)">
-                    <div class="fHeader" :class="w==true?'sun':'night'"> 
+                <div class="card" v-for="(item,i) of myList" :key="i">                   
+                    <div class="fHeader" :class="w==true?'sun':'night'" @click="btn1(item.frienduname,item.friendid)"> 
                         <p>{{item.frienduname}}</p>             
                     </div>
                     <!-- :class="this.$store.state.sun==?'sun':'night'" -->
-                    <!-- <div class="fBody"> -->
-                        <!-- <p>{{item.friendid}}</p> -->
-                    <!-- </div> -->
+                    <div class="fBody" @click="DelH(item.friendid,item.frienduname)" :class="w==true?'sun':'night'">
+                        <p>
+                            <!-- {{item.friendid}} -->
+                            <span class="mui-icon mui-icon-closeempty"></span>
+                        </p>
+                    </div>               
                 </div>
+                
             </div>
     </div>
 </template>
@@ -41,23 +43,46 @@ export default {
         }
     },
     methods:{
-        btn1(msg1,msg2){
-            // //console.log(msg1,msg2);
-            this.$router.push("/sayDouble?uname="+msg1+"&friendid="+msg2); 
-        },friends(){
+        // 设置一个函数操作
+        mounted(){
+            this.friends();
+        },
+        DelH(aa,bb){
+                var id=this.$store.state.uid;
+                var uname=this.$store.state.uname;
+                var frienduname=bb; 
+                var friendid=aa; 
+                var postData=this.qs.stringify({uname,frienduname,friendid});
+                var url = "http://127.0.0.1:3000/DelFrienduname";
+                this.axios.post(url,postData).then(result=>{
+                    console.log(result);
+                    if(result.data.code==1){   
+                        console.log(result.data.data);                            
+                           Toast({message:"删除好友[ "+bb+" ]成功",position:"bottom",duration:1000})
+                           this.friends();
+                           if(result.data.data==0){
+                                   this.myList=[];           
+                           }else if(result.data.data==1){
+                               if(this.myList.length==1){
+                                   this.myList=[];
+                               }   
+                           }
+                    }               
+                })          
+        },
+        friends(){
             var url = "http://127.0.0.1:3000/selectUname?id="+this.$store.state.uid;
             this.axios.get(url).then(result=>{
-            //console.log(result);
             if(result.data.code==1){
                 this.myList=result.data.result
             }else{
             }
         });
         },
-        aa(){
-            console.log("aa");
+        btn1(msg1,msg2){
+            this.$router.push("/sayDouble?uname="+msg1+"&friendid="+msg2); 
         }
-    },mounted(){
+    },created(){
         this.friends();
     }
 }
@@ -104,13 +129,17 @@ export default {
     .card{  
         border-radius: 10px;
         height:100%;
-        margin-top:2px;
-         background: rgba(119, 119, 119, 0.8);
+        margin-top:10px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.322);
+    }
+    .card:last-child{
+        margin-bottom:80px !important;
     }
     .card div:first-child{
         border:0;
         border-radius:10px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;  
         box-shadow: 0 0 6px rgb(131, 131, 131) inset;
     }
     .card div:first-child:active{
@@ -122,17 +151,24 @@ export default {
         box-sizing: border-box;
     }
     .fHeader{
-         width:100%;
+         width:90%;
         display: block;
         padding-left: 10px;
-        text-align: left;     
+        text-align: left;
     }
     .fHeader>p{
         color: #fff;
     }
-    .fBody{
-        padding-right: 10px;
-        text-align: right;
+    .fBody{    
+        width:10%;
+        border-radius: 10px;
+        text-align:center;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        
+    }
+    .fBody:active{
+        background: rgb(31, 167, 172);
     }
     .mint-header{
         background:transparent;
@@ -155,8 +191,14 @@ export default {
     .night>p{
         color: rgba(255, 255, 255, 0.747);
     }
+    .fBody.sun{
+        box-shadow: 0 0 2px rgb(0, 140, 255) inset;
+    }
+    .fBody.night{
+        box-shadow: 0 0 2px rgba(255, 255, 255, 0.479) inset;
+    }
     .Tabke{
-        text-align: left;
+        text-align:left;
         font-size: 10px;
     }
 </style>

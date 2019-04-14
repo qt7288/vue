@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-            <mt-header fixed title="M">
+            <mt-header fixed title="帐号管理">
                 <router-link to="" slot="">
                     <span class="mui-icon mui-icon-bars"></span>
                 </router-link>
@@ -21,7 +21,7 @@
         <!-- <p>登录状态:{{this.$store.state.stateU == 1 ? true:false}}</p> -->
         <p>状态:{{this.$store.state.stateU == 1 ? "下线":"在线"}}</p>
         <p>签名:{{this.$store.state.avatar}}</p>
-        <p>被点赞:{{this.$store.state.count}}</p>
+        <!-- <p>被点赞:{{this.$store.state.count}}</p> -->
         <p>{{this.$store.state.ctime}}</p>
         <p @click.stop="btnSun(isT)">{{sun==true?'日间模式':'夜间模式'}}</p>
         </div>
@@ -144,15 +144,19 @@ mounted(){
         background: rgba(121, 121, 121, 0.8);
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.322);
 }
+
 .sun>p,.sun>span{
     color: #fff;
 }
 /* 夜间模式样式 */
 .night{
-    
+    box-shadow: 0 0 6px black inset;
 }
 .night>p{
     color: rgba(255, 255, 255, 0.747);
+}
+.user_body.night{
+    background: rgba(0, 0, 0, 0.3);
 }
 .user_body>p{
     border-bottom:1px solid rgba(253, 253, 253, 0.212);
@@ -188,7 +192,6 @@ mounted(){
 }
 /* user_body */
 
-    /* 退出 */
     .back{
         height:30px;
         color: rgb(255, 255, 255);

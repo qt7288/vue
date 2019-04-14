@@ -7,7 +7,7 @@
 </mt-header>
 
 <div id="zans" @click="zans" :class="isLeft == true ? 'open':'close'">
-<p>{{this.$store.state.count}}</p>
+<!-- <p>{{this.$store.state.count}}</p> -->
 <div class="neir"><p>{{this.$store.state.uname}}</p></div>
 </div>
 
@@ -29,27 +29,25 @@
 
         <div class="cardAll" v-for="(item,index) of myList" :key="index">
                 <div class="cardBody"  :class="item.uname==ww?'blue':'red'">
-                    <!-- <span> -->
                         {{item.sayto}}
-                    <!-- </span> -->
                 </div>
                 <div class="pinglun" :class="isShowP==true ? 'xianshi':'yincang'">
                 <div class="cardHeader">
-                    <span>发表者：{{item.uname}}</span>
+                    <span style="color:#fff">发表者:{{item.uname}}</span>
                 </div>
                 <div class="time">
-                    <span>{{item.saytoTime}}</span>
+                    <span>发表时间:{{item.saytoTime}}</span>
                 </div>
             </div>    
             <table></table>
             </div>
         <div class="btnZ">
-    <mt-palette-button content="Q" @expand="main_log('expand')" @expanded="main_log('expanded')" @collapse="main_log('collapse')"
-      direction="rt" class="pb" :radius="50" ref="target_1" mainButtonStyle="color:#fff;background-color:#26a2ff;"
-      style="left:auto;right:0;width:30px;height:30px;font-size:10px;line-height:30px;">
-      <div class="my-icon-button indexicon icon-popup">
+    <mt-palette-button content="❤" @expand="main_log('expand')" @expanded="main_log('expanded')" @collapse="main_log('collapse')"
+      direction="rt" class="pb" :radius="50" ref="target_1" mainButtonStyle="color:#ff0000c7;background-color:#26a2ff;"
+      style="left:auto;right:-10px;width:30px;height:30px;font-size:10px;line-height:30px;">
+      <!-- <div class="my-icon-button indexicon icon-popup">
           <span class="mui-icon-extra mui-icon-extra-heart" @click="zan" :class="showColor==true ? 'whiteU':'blackU'"></span>
-      </div>
+      </div> -->
       <div class="my-icon-button indexicon icon-popup">
            <span class="mui-icon mui-icon-chatbubble" @click="talk"></span>
       </div>
@@ -72,7 +70,7 @@ export default {
         return {
             allLoaded:false,
             myList:[],
-            friendTitle:"★",
+            friendTitle:"小镇的喧嚣",
             pageSize:5,
             isShowP:false,
             isa:0,
@@ -343,7 +341,7 @@ export default {
         line-height: 16px;
         background:rgba(95, 133, 143, 0.5);
         border-radius: 10px;
-        width:50%;
+        width:90%;
         color: #fff;
         margin: 0 auto;
         box-shadow: 0 0px 4px rgb(247, 247, 247) inset;
@@ -353,7 +351,7 @@ export default {
         margin: 0 auto;
         border-radius: 10px;
         position: relative;
-        margin-top:20px;
+        margin-top:16px;
         transition: .5s;
         overflow: hidden;
     }
@@ -372,9 +370,9 @@ export default {
     #zans{
        position: fixed;
        min-width:10%;
-       height:60px;
+       height:30px;
        background: rgba(0, 0, 0, 0.315);
-       top:170px;
+       top:150px;
        right:3%;
        z-index: 100;
        border-radius: 10px;       
@@ -402,29 +400,23 @@ export default {
     }
     .neir{
         width: 100%;
-        height:50%;
+        height:100%;
         position:absolute;
         bottom: 0;
         background: rgba(255, 255, 255, 0.541);
         border-radius: 10px;
-        animation: state 2s linear;
-    }
-    @keyframes state {
-        from{height: 100%;background: rgba(255, 255, 255,1);}
-        to{height: 50%;}
-    }
-    .neir p{
-        /* line-height:px; */
+        
     }
     .blue,.red{
         border-radius: 10px;
     }
     .red{
-        /* border:1px solid rgb(255, 255, 255); */
-        box-shadow: 0 0 5px white;
+        background: rgb(153, 155, 155);
+        box-shadow: 0 0 4px white;
     }
     .blue{
-        
-        box-shadow: 0 0 5px rgba(0, 255, 255, 0.534);
+        background: #fff;
+        background:url("http://127.0.0.1:3000/bg17.jpg");
+        box-shadow: 0 0 2px rgba(125, 126, 126, 0.534);
     }
 </style>

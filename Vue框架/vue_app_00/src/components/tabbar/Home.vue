@@ -13,15 +13,14 @@
     </mt-header>
 
     <mt-popup style="" v-model="isShows" position="" pop-transition="popup-fade" v-show="isShows">
-      <span>Timer…… <br />{{timer}}</span><br>
+      <span>{{timer}}</span><br>
       <hr>
       <span>任时间冉冉流逝……</span>
     </mt-popup>
-      
       <mt-popup style="" v-model="isDay" position="" pop-transition="popup-fade" v-show="isDay">
-      <span>days……</span>
-        <ul style="list-style:none">
-        <li v-for="(timer,t) of myDays" :key="t">{{timer.user_loginTime}}</li>
+      <span>days……</span><hr>
+        <ul style="list-style:none" class="mint-ul">
+        <li v-for="(timer,t) of myDays" :key="t">{{t}}**{{timer.user_loginTime}}</li>
       </ul>
       <hr>
       <span>您曾走过的足迹……</span>
@@ -74,6 +73,7 @@
                 </div> -->
                 <div class="time">
                     <span>{{item.saytoTime}}</span>
+                    <span @click.stop="DelP(index,item.saytoTime,item.sayto)">删除</span>
                 </div>
             </div>    
             <table></table>
@@ -103,19 +103,37 @@ export default {
        isShows:false,
        isDay:false,
        myDays:[],
-       myList:[
-         {sayto:"空荡荡的",saytoTime:"2019-4-13 14:52:52"},],
+       myList:[{sayto:"空荡荡",saytoTime:"2019-4-14 16:00:48"}],
        showHome:false,
        coun:1,
        a:1
      }
    },
-   created() {
+   created(){
      this.handleImage();
      this.handleGrid();
    },
    methods:{
-     selectDays(){
+     DelP(msg1,msg2,msg3){
+        // 删除发表言论
+        var uname=this.$store.state.uname;
+        var saytoTime=msg2
+        var sayto=msg3
+        console.log(saytoTime,sayto,uname)
+        var postData=this.qs.stringify({uname,saytoTime,sayto});
+        var url = "http://127.0.0.1:3000/DelP";
+        this.axios.post(url,postData).then(result=>{
+            console.log(result.data.data);
+            if(result.data.code==1){       
+                // 如果删除成功、刷新页面
+              this.qq();
+              this.Toast("delete ok");
+              if(result.data.data==0){
+                this.myList=[{sayto:"空荡荡",saytoTime:""}];
+              }
+            }
+        })
+     },selectDays(){
             var url = "http://127.0.0.1:3000/selectDays?uname="+this.$store.state.uname;
         this.axios.get(url).then(result=>{
           console.log(result);
@@ -153,7 +171,6 @@ export default {
               this.photo=result.data.data
             }}) 
          this.isShow=true;
-
          this.ist=0
        }else{
          this.isShow=false
@@ -169,16 +186,27 @@ export default {
         body.style.backgroundSize=100+"%";
         body.style.opacity=1;
      },
+     qq(){
+          var url="http://127.0.0.1:3000/selectMyhome?uid="+this.$store.state.uid;
+          this.axios.get(url).then(result=>{
+            console.log(result);
+            if(result.data.code==1){
+              this.myList=result.data.data
+            }else if(result.data.code==-1){
+              this.myList=[];
+            }
+          }
+          ) 
+     },
      jump(e){
        var id=e.target.dataset.id;
         var path="/";
         if(id==1){
-          path=""
+          path="Tofriend"
         setTimeout(()=>{
-        this.Toast("静心")
+        this.Toast("你的想法")
           if(this.a==1){
-            this.$store.state.play=true; 
-           
+            this.$store.state.play=true;          
             this.a=-1;
           }else if(this.a==-1){
             this.$store.state.play=false;  
@@ -210,15 +238,7 @@ export default {
         }else if(id==5){
         path=""
         if(this.coun==1){
-          var url="http://127.0.0.1:3000/selectMyhome?uid="+this.$store.state.uid;
-          this.axios.get(url).then(result=>{
-            console.log(result);
-            if(result.data.code==1){
-              this.myList=result.data.data
-            }else if(result.data.code==-1){
-              this.Toast("什么都没有呢")
-            }
-          }) 
+              this.qq();
           this.Toast("loading")
           setTimeout(() => {
            
@@ -409,16 +429,16 @@ export default {
   }
   .cardNav{
     text-align:center;
-    background:linear-gradient(to right,transparent 0, rgb(202, 192, 192) 50%,transparent 100%);
+    background:url("http://127.0.0.1:3000/bg01.jpg");
     height:30px;
     width:96%;
     margin: 0 auto;
-    color: #fff;
+    color: rgb(0, 0, 0);
     line-height:30px;
     font-size: 10px;
     border-radius: 10px;
-    box-shadow: 0 0 2px black inset;
-    text-shadow: 0 0 2px rgb(29, 170, 189);
+    /* box-shadow: 0 0 2px black inset; */
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.26);
   }
   .closeP,.openP{
     transition:2s;
@@ -437,7 +457,7 @@ export default {
   .mint-popup{
     background:transparent;
     color: #fff;
-    text-shadow: 0 0 5px white;
+    width:80%;
   }
   /* 文本卡片 */
       #myhome{
@@ -520,12 +540,20 @@ export default {
       transition:1s;
     }
     mt-swipe-item>img{
-      width: 100%;
-      
+      width: 100%;     
     }
+  .mint-ul{
+    overflow-y:auto;
+    height:300px;
+    font-size:12px;
+    animation: open 2s linear;
+  }
+  @keyframes open {
+      from{height: 0;}
+      to{height:300px;}
+  }
 </style>
 <style>
-
 ul{
   margin: 0;
   padding: 0;

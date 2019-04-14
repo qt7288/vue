@@ -64,8 +64,9 @@ export default {
             }
             console.log(uname,email,upwd);
                 //3:发送ajax
-                var url = "http://172.242.3.181:3000/back?uname="+uname+"&email="+email+"&upwd="+upwd;
-                this.axios.get(url).then(result=>{
+                var postData=this.qs.stringify({uname,email,upwd});
+                var url = "http://127.0.0.1:3000/back";
+                this.axios.post(url,postData).then(result=>{
                     //11:41
                     console.log(result);
                     if(result.data.code==3){

@@ -18,7 +18,6 @@
         </div>
     </div>
 </template>
-
 <script>
 import {Toast} from "mint-ui"
 export default {
@@ -51,7 +50,7 @@ export default {
             if(result.data.code==1){
                 console.log(result);
                 this.Toast(uname+"发送成功"); 
-                this.sayto="";
+                this.sayTothing="";
                 return;  
                 }
             })
